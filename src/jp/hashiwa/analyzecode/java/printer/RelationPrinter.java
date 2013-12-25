@@ -10,27 +10,18 @@ import jp.hashiwa.analyzecode.java.Clazz;
 
 public class RelationPrinter {
 
-  private final PrintStream out;
-//  private List<Clazz> clazzes;
-//  private Map<String, Relation> relations;
   private List<Relation> roots;
   
   /**
    * 'out' is not freed in this class.
    * @param out
-   */
-  public RelationPrinter(PrintStream out) {
-    this.out = out;
-  }
-  
-  /**
-   * 
    * @param clazzes
    */
-  public void print(List<Clazz> clazzes) {
+  public void printOn(PrintStream out, List<Clazz> clazzes) {
     init(clazzes);
+    
     for (Relation r: roots) {
-      r.print();
+      r.printOn(out);
     }
   }
   

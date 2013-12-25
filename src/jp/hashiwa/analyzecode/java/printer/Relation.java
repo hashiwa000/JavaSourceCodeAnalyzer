@@ -1,5 +1,6 @@
 package jp.hashiwa.analyzecode.java.printer;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -7,8 +8,8 @@ import java.util.Stack;
 
 class Relation {
   private static String ROOT_PREFIX      = "+--- ";
-  private static String EXTEND_PREFIX    = "<=== ";
-  private static String IMPLEMENT_PREFIX = "<--- ";
+  private static String EXTEND_PREFIX    = "<--- ";
+  private static String IMPLEMENT_PREFIX = "<... ";
   private static int INDENT = 2;
   
   private final String name;
@@ -16,8 +17,6 @@ class Relation {
       new ArrayList<Relation>();
   private final List<Relation> implemented =
       new ArrayList<Relation>();
-  
-//  private boolean printBridge = false;
   
   Relation(String name) {
     this.name = name;
@@ -37,19 +36,19 @@ class Relation {
     implemented.add(r);
   }
   
-  void print() {
-    print(ROOT_PREFIX, new Stack<Relation>());
-    System.out.println();
+  void printOn(PrintStream out) {
+    printOn(out, ROOT_PREFIX, new Stack<Relation>());
+    out.println();
   }
   
-  private void print(String prefix, Stack<Relation> stack) {
+  private void printOn(PrintStream out, String prefix, Stack<Relation> stack) {
     for (Relation r: stack) {
       for (int i=0 ; i<INDENT ; i++) {
-        System.out.print(' ');
+        out.print(' ');
       }
     }
-    System.out.print(prefix);
-    System.out.println(name);
+    out.print(prefix);
+    out.println(name);
     
     // push
     stack.push(this);
@@ -57,13 +56,13 @@ class Relation {
     // extends
     for (int i=0 ; i<extended.size() ; i++) {
       Relation r = extended.get(i);
-      r.print(EXTEND_PREFIX, stack);
+      r.printOn(out, EXTEND_PREFIX, stack);
     }
     
     // implements
     for (int i=0 ; i<implemented.size() ; i++) {
       Relation r = implemented.get(i);
-      r.print(IMPLEMENT_PREFIX, stack);
+      r.printOn(out, IMPLEMENT_PREFIX, stack);
     }
     
     stack.pop();

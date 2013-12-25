@@ -3,6 +3,7 @@ package jp.hashiwa.analyzecode.java;
 import japa.parser.ParseException;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +35,7 @@ public class Main {
     CodeFinder finder = new CodeFinder("*.java");
     CodeParser parser = new CodeParser();
     CodeResolver resolver = new CodeResolver(libraryFiles);
-    RelationPrinter printer = new RelationPrinter(System.out);
+    RelationPrinter printer = new RelationPrinter();
     
     List<String> codeFiles;
     List<Clazz> clazzes = new ArrayList<Clazz>();
@@ -80,7 +81,16 @@ public class Main {
     
     System.out.println(" *** Print extends/implements relationships *** ");
     
-    printer.print(clazzes);
+    PrintStream out = System.out;
+    if (arg.hasOutputFile()) {
+      out = new PrintStream(arg.getOutputFile());
+    }
+    
+    printer.printOn(out, clazzes);
+    
+    if (arg.hasOutputFile()) {
+      out.close();
+    }
   }
   
   private static List<String> getLibraryFiles(Path root) {

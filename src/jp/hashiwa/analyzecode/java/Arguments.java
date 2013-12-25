@@ -46,6 +46,10 @@ public class Arguments {
     return outFile;
   }
   
+  public boolean hasOutputFile() {
+    return outFile != null;
+  }
+  
   static void usage() {
     System.out.println("Usage: [-l <library dir>] [-d <output file>] <source dir>");
     System.out.println("  library dir : root directory for searching jar files");
