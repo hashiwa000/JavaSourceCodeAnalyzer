@@ -10,7 +10,7 @@ import jp.hashiwa.analyzecode.java.Clazz;
 
 public class CodeResolver {
   private static final String JAVA_LANG = "java.lang.";
-  private static final boolean debug = true; //false;
+  private static final boolean debug = false;
 
   private List<Clazz> clazzes;
   private final ClassLoader loader;

@@ -11,10 +11,11 @@ import java.util.List;
 
 import jp.hashiwa.analyzecode.java.finder.CodeFinder;
 import jp.hashiwa.analyzecode.java.parser.CodeParser;
+import jp.hashiwa.analyzecode.java.printer.RelationPrinter;
 import jp.hashiwa.analyzecode.java.resolver.CodeResolver;
 
 public class Main {
-  private static final boolean debug = true; //false;
+  private static final boolean debug = false;
   private static Arguments arg;
   
   public static void main(String[] args) throws IOException {
@@ -33,13 +34,18 @@ public class Main {
     CodeFinder finder = new CodeFinder("*.java");
     CodeParser parser = new CodeParser();
     CodeResolver resolver = new CodeResolver(libraryFiles);
+    RelationPrinter printer = new RelationPrinter(System.out);
     
     List<String> codeFiles;
     List<Clazz> clazzes = new ArrayList<Clazz>();
     
+    System.out.println(" *** Find source files *** ");
+    
     // found java codes
     Files.walkFileTree(root, finder);
     codeFiles = finder.getFoundCodeFiles();
+    
+    System.out.println(" *** Parse source files *** ");
     
     // parse java codes
     for (String f: codeFiles) {
@@ -67,8 +73,14 @@ public class Main {
       }
     }
     
+    System.out.println(" *** Resolve class names *** ");
+    
     // resolve java codes
     resolver.resolve(clazzes);
+    
+    System.out.println(" *** Print extends/implements relationships *** ");
+    
+    printer.print(clazzes);
   }
   
   private static List<String> getLibraryFiles(Path root) {
@@ -92,9 +104,5 @@ public class Main {
     }
     
     return founds;
-  }
-
-  private static void usage() {
-    System.exit(-1);
   }
 }
