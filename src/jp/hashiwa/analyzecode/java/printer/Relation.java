@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Stack;
 
 
-class Relation {
-  private static String ROOT_PREFIX      = "+--- ";
-  private static String EXTEND_PREFIX    = "<--- ";
-  private static String IMPLEMENT_PREFIX = "<... ";
+abstract class Relation {
   private static int INDENT = 2;
   
   private final String name;
@@ -21,6 +18,10 @@ class Relation {
   Relation(String name) {
     this.name = name;
   }
+  
+  protected abstract String getRootPrefix();
+  protected abstract String getExtendPrefix();
+  protected abstract String getImplementPrefix();
   
   void addExtended(Relation r) {
     if (r == null) {
@@ -37,7 +38,7 @@ class Relation {
   }
   
   void printOn(PrintStream out) {
-    printOn(out, ROOT_PREFIX, new Stack<Relation>());
+    printOn(out, getRootPrefix(), new Stack<Relation>());
     out.println();
   }
   
@@ -56,13 +57,13 @@ class Relation {
     // extends
     for (int i=0 ; i<extended.size() ; i++) {
       Relation r = extended.get(i);
-      r.printOn(out, EXTEND_PREFIX, stack);
+      r.printOn(out, getExtendPrefix(), stack);
     }
     
     // implements
     for (int i=0 ; i<implemented.size() ; i++) {
       Relation r = implemented.get(i);
-      r.printOn(out, IMPLEMENT_PREFIX, stack);
+      r.printOn(out, getImplementPrefix(), stack);
     }
     
     stack.pop();

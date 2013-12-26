@@ -12,7 +12,9 @@ import java.util.List;
 
 import jp.hashiwa.analyzecode.java.finder.CodeFinder;
 import jp.hashiwa.analyzecode.java.parser.CodeParser;
+import jp.hashiwa.analyzecode.java.printer.DownwardRelationPrinter;
 import jp.hashiwa.analyzecode.java.printer.RelationPrinter;
+import jp.hashiwa.analyzecode.java.printer.UpwardRelationPrinter;
 import jp.hashiwa.analyzecode.java.resolver.CodeResolver;
 
 public class Main {
@@ -35,14 +37,19 @@ public class Main {
     CodeFinder finder = new CodeFinder("*.java");
     CodeParser parser = new CodeParser();
     CodeResolver resolver = new CodeResolver(libraryFiles);
-    RelationPrinter printer = new RelationPrinter();
+    RelationPrinter printer;
+    if (arg.printDownward()) {
+      printer = new DownwardRelationPrinter();
+    } else {
+      printer = new UpwardRelationPrinter();
+    }
     
     List<String> codeFiles;
     List<Clazz> clazzes = new ArrayList<Clazz>();
     
     System.out.println(" *** Find source files *** ");
     
-    // found java codes
+    // find java codes
     Files.walkFileTree(root, finder);
     codeFiles = finder.getFoundCodeFiles();
     
