@@ -11,7 +11,7 @@ First of all, our first goal is to show extends/implements relationships among j
 * JDK/JRE 6 or later
 * *javaparser 1.0.8* (http://code.google.com/p/javaparser/)
 
-
+Usage:  
     java.exe jp.hashiwa.analyzecode.java.Main [-l *library dir*] [-d *output file*] [-up|-down] *source dir*  
       *library dir* : root directory for searching jar files  
       *output file* : result output file path  
@@ -40,5 +40,5 @@ First of all, our first goal is to show extends/implements relationships among j
       <--- japa.parser.ast.body.Parameter
 
 ## Known Bugs
-* Some class cannot be resolved.
+* Some classes cannot be resolved.
 
